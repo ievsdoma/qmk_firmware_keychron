@@ -52,9 +52,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_END,   KC_LCTL,  KC_LWIN,  MO(WIN_FN),  KC_LALT,            KC_SPC,                        KC_SPC,             KC_RALT,  MO(WIN_FN), KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [WIN_FN] = LAYOUT_91_ansi(
-        RGB_TOG,  _______,  KC_BRID,  KC_BRIU,     KC_TASK,  KC_FLXP,  RGB_VAD,   RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,    KC_VOLU,  _______,  _______,  RGB_TOG,
+        RGB_TOG,  _______,  KC_BRID,  KC_BRIU,     KC_TASK,  KC_FLXP,  RGB_VAD,   RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,    KC_VOLU,  QK_BOOT,  EE_CLR,   RGB_TOG,
         _______,  _______,  _______,  _______,     _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        AS_RPT,   _______,  _______,  _______,     KC_7,     KC_8,     KC_9,      RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  _______,    _______,  _______,            _______,
+        AS_RPT,   _______,  QK_BOOT,  _______,     KC_7,     KC_8,     KC_9,      RGB_MOD,  RGB_VAI,  RGB_HUI,  RGB_SAI,  RGB_SPI,  _______,    _______,  _______,            _______,
         AS_UP,    KC_CAPS,  _______,  _______,     KC_4,     KC_5,     KC_6,      RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  _______,              _______,            _______,
         AS_DOWN,  AS_TOGG,            _______,     KC_0,     KC_1,     KC_2,      KC_3,     NK_TOGG,  _______,  _______,  _______,  _______,              _______,  _______,
         _______,  _______,  _______,  _______,     _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
