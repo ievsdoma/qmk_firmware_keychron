@@ -21,3 +21,5 @@
 
 /* Enable caps-lock LED */
 #define CAPS_LOCK_LED_INDEX 23
+
+#define DYNAMIC_KEYMAP_LAYER_COUNT 5

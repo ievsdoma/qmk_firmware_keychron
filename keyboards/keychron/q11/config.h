@@ -58,3 +58,6 @@
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=rgb-matrix-effects
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_MATRIX_KEYPRESSES
+
+#define SPLIT_WATCHDOG_ENABLE
+#define SPLIT_WATCHDOG_TIMEOUT 7000
