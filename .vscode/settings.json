@@ -41,5 +41,6 @@
             "args": ["--login"]
         }
     },
+    "terminal.integrated.defaultProfile.windows": "QMK_MSYS",
     "terminal.integrated.cursorStyle": "line"
 }
