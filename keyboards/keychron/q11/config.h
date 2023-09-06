@@ -35,5 +35,3 @@
 // Needed as the master side could enter slave state during poweron
 // of host, due to missing VUSB detection.
 #define SPLIT_WATCHDOG_ENABLE
-
-#define SPLIT_WATCHDOG_ENABLE
