@@ -212,6 +212,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         RGB_MATRIX_INDICATOR_SET_COLOR(23, 255, 0, 0);
         RGB_MATRIX_INDICATOR_SET_COLOR(24, 255, 0, 0);
         RGB_MATRIX_INDICATOR_SET_COLOR(30, 255, 0, 0);
+
+        continue_led_processing = false;
+
     } else if (!rgb_matrix_get_flags()) {
         RGB_MATRIX_INDICATOR_SET_COLOR(16, 0, 0, 0);
         RGB_MATRIX_INDICATOR_SET_COLOR(22, 0, 0, 0);
