@@ -169,7 +169,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+uint8_t g_last_layer = 0;
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    bool continue_led_processing = true;
+
     if (get_highest_layer(layer_state) > 0) {
         uint8_t layer = get_highest_layer(layer_state);
 
@@ -182,6 +186,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 }
             }
         }
+
+        g_last_layer = layer;
+    } else if (!rgb_matrix_get_flags() && g_last_layer > 0) {
+        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                uint8_t index = g_led_config.matrix_co[row][col];
+
+                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(g_last_layer, (keypos_t){col,row}) > KC_TRNS) {
+                    rgb_matrix_set_color(index, RGB_OFF);
+                }
+            }
+        }
+
+        continue_led_processing = false;
     }
 
     if(is_caps_word_on()){
@@ -190,7 +208,15 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         RGB_MATRIX_INDICATOR_SET_COLOR(23, 255, 0, 0);
         RGB_MATRIX_INDICATOR_SET_COLOR(24, 255, 0, 0);
         RGB_MATRIX_INDICATOR_SET_COLOR(30, 255, 0, 0);
+    } else if (!rgb_matrix_get_flags()) {
+        RGB_MATRIX_INDICATOR_SET_COLOR(16, 0, 0, 0);
+        RGB_MATRIX_INDICATOR_SET_COLOR(22, 0, 0, 0);
+        RGB_MATRIX_INDICATOR_SET_COLOR(23, 0, 0, 0);
+        RGB_MATRIX_INDICATOR_SET_COLOR(24, 0, 0, 0);
+        RGB_MATRIX_INDICATOR_SET_COLOR(30, 0, 0, 0);
+
+        continue_led_processing = false;
     }
 
-    return true;
+    return continue_led_processing;
 }
