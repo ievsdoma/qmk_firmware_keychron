@@ -1,0 +1,4 @@
+#pragma once
+
+#define SPLIT_WATCHDOG_ENABLE
+#define SPLIT_LAYER_STATE_ENABLE
