@@ -1,7 +1,5 @@
 #pragma once
 
-#include QMK_KEYBOARD_H
-
 enum layers{
     MAC_BASE,
     MAC_FN,
