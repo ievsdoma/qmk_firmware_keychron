@@ -29,3 +29,8 @@ enum {
 
 const uint8_t* g_caps_indicators;
 const uint8_t g_caps_indicators_count;
+
+#define RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(r, g, b) \
+    for (uint8_t led = 0; led < g_caps_indicators_count; led++) { \
+        RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
+    }

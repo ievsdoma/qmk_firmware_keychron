@@ -111,16 +111,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     if(is_caps_word_on()){
-        for (uint8_t led = 0; led < g_caps_indicators_count; led++) {
-            RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], 255, 0, 0);
-        }
+        RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(255, 0, 0);
 
         continue_led_processing = false;
 
     } else if (!rgb_matrix_get_flags()) {
-        for (uint8_t led = 0; led < g_caps_indicators_count; led++) {
-            RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], 0, 0, 0);
-        }
+        RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(0, 0, 0);
 
         continue_led_processing = false;
     }
