@@ -26,8 +26,11 @@
     },
     "python.formatting.provider": "yapf",
     "[json]": {
-	    "editor.formatOnSave": false
+        "editor.formatOnSave": false
     },
+    "clangd.arguments": [
+        "--header-insertion=never"
+    ],
     "terminal.integrated.profiles.windows": {
         "QMK_MSYS": {
             "path": "C:/QMK_MSYS/usr/bin/bash.exe",
@@ -38,5 +41,6 @@
             "args": ["--login"]
         }
     },
+    "terminal.integrated.defaultProfile.windows": "QMK_MSYS",
     "terminal.integrated.cursorStyle": "line"
 }
