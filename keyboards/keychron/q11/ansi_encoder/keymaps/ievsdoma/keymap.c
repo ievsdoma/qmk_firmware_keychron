@@ -19,6 +19,10 @@
 #define KC_TASK LGUI(KC_TAB)
 #define KC_FLXP LGUI(KC_E)
 
+const uint8_t caps_indicators[] = {16, 22, 23, 24, 30};
+const uint8_t* g_caps_indicators = caps_indicators;
+const uint8_t g_caps_indicators_count = sizeof(caps_indicators);
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_91_ansi(
         KC_MUTE,  KC_ESC,   KC_BRID,  KC_BRIU,     KC_MCTL,  KC_LPAD,    RGB_VAD,   RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,      KC_VOLU,  KC_INS,   KC_DEL,   KC_MUTE,
