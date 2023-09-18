@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,       _______,  _______,            _______,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,                 AS_RPT,             _______,
         QK_RBT,             _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,                 _______,  AS_UP,
-        EE_CLR,   _______,  _______,                                _______,                                _______,  _______,       _______,  _______,  AS_DOWN,  _______)
+        EE_CLR,   _______,  _______,                                DB_TOGG,                                _______,  _______,       _______,  _______,  AS_DOWN,  _______)
 };
 
 #if defined(ENCODER_MAP_ENABLE)
@@ -69,6 +69,6 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [MAC_FN] = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
     [WIN_BASE] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     [WIN_FN] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-    [SYSTEM_CMD] = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI)},
+    [SYSTEM_CMD] = {ENCODER_CCW_CW(RGB_RMOD, RGB_MOD)},
 };
 #endif // ENCODER_MAP_ENABLE
