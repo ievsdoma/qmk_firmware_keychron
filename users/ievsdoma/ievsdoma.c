@@ -78,8 +78,8 @@ uint8_t g_last_layer = 0;
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     bool continue_led_processing = true;
 
-    if (get_highest_layer(layer_state) > 0) {
-        uint8_t layer = get_highest_layer(layer_state);
+    uint8_t layer = get_highest_layer(layer_state);
+    if (layer > 0) {
 
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -122,4 +122,34 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
 
     return continue_led_processing;
+}
+
+bool g_rgb_matrix_was_disabled = false;
+HSV g_last_colour;
+
+void ensure_rgb_matrix_enabled(bool desired_state) {
+    if (desired_state) {
+        if (!rgb_matrix_is_enabled()) {
+            g_rgb_matrix_was_disabled = true;
+            g_last_colour = rgb_matrix_get_hsv();
+            rgb_matrix_enable_noeeprom();
+            rgb_matrix_sethsv_noeeprom(HSV_OFF);
+        }
+    } else {
+        if (g_rgb_matrix_was_disabled) {
+            g_rgb_matrix_was_disabled = false;
+            rgb_matrix_sethsv_noeeprom(g_last_colour.h, g_last_colour.s, g_last_colour.v);
+            rgb_matrix_disable_noeeprom();
+        }
+    }
+}
+
+void caps_word_set_user(bool active) {
+    ensure_rgb_matrix_enabled(active);
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    ensure_rgb_matrix_enabled(get_highest_layer(state) > 0);
+
+    return state;
 }
