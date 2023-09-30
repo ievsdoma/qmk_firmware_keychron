@@ -1,6 +1,21 @@
 #include QMK_KEYBOARD_H
 #include "ievsdoma.h"
 
+// Define a type for as many tap dance states as you need
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
 // Declare the functions to be used with your tap dance key(s)
 
 // Function associated with all tap dances
@@ -72,6 +87,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+#define RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(r, g, b) \
+    for (uint8_t led = 0; led < g_caps_indicators_count; led++) { \
+        RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
+    }
 
 uint8_t g_last_layer = 0;
 
