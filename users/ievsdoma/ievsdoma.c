@@ -93,7 +93,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
     }
 
-uint8_t g_last_layer = 0;
+uint8_t last_layer_number = 0;
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     bool continue_led_processing = true;
@@ -112,21 +112,21 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             }
         }
 
-        g_last_layer = layer;
+        last_layer_number = layer;
 
-    } else if (!rgb_matrix_get_flags() && g_last_layer > 0) {
+    } else if (!rgb_matrix_get_flags() && last_layer_number > 0) {
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
 
                 // set all leds at once and forget
-                if (index != NO_LED && keymap_key_to_keycode(g_last_layer, (keypos_t){col,row}) > KC_TRNS) {
+                if (index != NO_LED && keymap_key_to_keycode(last_layer_number, (keypos_t){col,row}) > KC_TRNS) {
                     rgb_matrix_set_color(index, RGB_OFF);
                 }
             }
         }
 
-        g_last_layer = 0;
+        last_layer_number = 0;
         continue_led_processing = false;
     }
 
@@ -144,21 +144,21 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     return continue_led_processing;
 }
 
-bool g_rgb_matrix_was_disabled = false;
-HSV g_last_colour;
+bool rgb_matrix_was_disabled = false;
+HSV last_colour_hsv;
 
 void ensure_rgb_matrix_enabled(bool desired_state) {
     if (desired_state) {
         if (!rgb_matrix_is_enabled()) {
-            g_rgb_matrix_was_disabled = true;
-            g_last_colour = rgb_matrix_get_hsv();
+            rgb_matrix_was_disabled = true;
+            last_colour_hsv = rgb_matrix_get_hsv();
             rgb_matrix_enable_noeeprom();
             rgb_matrix_sethsv_noeeprom(HSV_OFF);
         }
     } else {
-        if (g_rgb_matrix_was_disabled) {
-            g_rgb_matrix_was_disabled = false;
-            rgb_matrix_sethsv_noeeprom(g_last_colour.h, g_last_colour.s, g_last_colour.v);
+        if (rgb_matrix_was_disabled) {
+            rgb_matrix_was_disabled = false;
+            rgb_matrix_sethsv_noeeprom(last_colour_hsv.h, last_colour_hsv.s, last_colour_hsv.v);
             rgb_matrix_disable_noeeprom();
         }
     }
