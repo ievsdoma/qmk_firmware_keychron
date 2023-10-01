@@ -20,7 +20,7 @@
 #define KC_TASK LGUI(KC_TAB)
 #define KC_FLXP LGUI(KC_E)
 
-const uint8_t caps_indicators[] = {16, 22, 23, 24, 30};
+const uint8_t caps_indicators[] = {16, 23, 24, 30};
 const uint8_t* g_caps_indicators = caps_indicators;
 const uint8_t g_caps_indicators_count = sizeof(caps_indicators);
 
