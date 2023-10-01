@@ -15,7 +15,8 @@
  */
 
 #include QMK_KEYBOARD_H
-#include "ievsdoma.h"
+#include "indicators.h"
+#include "two_layers_tap_dance.h"
 
 const uint8_t caps_indicators[] = {30, 45, 46, 59};
 const uint8_t* g_caps_indicators = caps_indicators;

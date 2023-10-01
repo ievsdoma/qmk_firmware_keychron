@@ -5,11 +5,3 @@
 #define CAPS_WORD_IDLE_TIMEOUT 3000
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 5
-
-enum layers{
-    MAC_BASE,
-    MAC_FN,
-    WIN_BASE,
-    WIN_FN,
-    SYSTEM_CMD,
-};

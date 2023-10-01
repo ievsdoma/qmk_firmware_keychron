@@ -1,4 +1,5 @@
-SRC += ievsdoma.c
+SRC += indicators.c
+SRC += two_layers_tap_dance.c
 
 VIA_ENABLE = yes
 ENCODER_MAP_ENABLE = yes
