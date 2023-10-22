@@ -1,53 +1,137 @@
 #include "quantum.h"
 #include "two_layers_tap_dance.h"
+#include "colours.h"
 
-typedef struct _keycode_range_colour {
-    uint8_t from;
-    uint8_t to;
-    HSV colour;
-} keycode_range_colour;
+typedef enum {
+    KCC_ALFAS = 0,
+    KCC_NUMERICS,
+    KCC_MODS,
+    KCC_FUNCTIONAL,
+    KCC_NAV,
+    KCC_SPECIAL,
+    KCC_NONE
+} sd_keycode_category;
 
-static keycode_range_colour keycode_colour_mappings[] = {
-    {
-        KC_A, KC_Z,
-        {HSV_AZURE}
-    },
-    {
-        KC_LEFT_BRACKET, KC_SLASH,
-        {HSV_AZURE}
-    },
-    {
-        KC_1, KC_0,
-        {HSV_GREEN}
-    },
-    {
-        KC_LEFT_CTRL, KC_RIGHT_GUI,
-        {HSV_BLUE}
-    },
-    {
-        KC_F1, KC_F12,
-        {HSV_PINK}
-    },
-    {
-        KC_ESC, KC_ESC,
-        {HSV_RED}
-    }
+static HSV keycode_category_colour_mapping[] = {
+    [KCC_ALFAS] = {HSV_AZURE},
+    [KCC_NUMERICS] = {HSV_GREEN},
+    [KCC_MODS] = {HSV_BLUE},
+    [KCC_FUNCTIONAL] = {HSV_HOT_PINK},
+    [KCC_NAV] = {HSV_PURPLE},
+    [KCC_SPECIAL] = {HSV_RED},
+    [KCC_NONE] = {HSV_OFF}
 };
 
-static HSV get_keycode_colour(uint8_t keycode) {
-
-    uint8_t map_cnt = sizeof(keycode_colour_mappings)/sizeof(keycode_colour_mappings[0]);
-
-    for (uint8_t map_idx = 0; map_idx < map_cnt; map_idx++) {
-        keycode_range_colour map = keycode_colour_mappings[map_idx];
-        if (map.from <= keycode && keycode <= map.to) {
-            return map.colour;
-        }
+static sd_keycode_category get_keycode_category(uint16_t keycode) {
+    switch (keycode) {
+        case KC_A:
+        case KC_B:
+        case KC_C:
+        case KC_D:
+        case KC_E:
+        case KC_F:
+        case KC_G:
+        case KC_H:
+        case KC_I:
+        case KC_J:
+        case KC_K:
+        case KC_L:
+        case KC_M:
+        case KC_N:
+        case KC_O:
+        case KC_P:
+        case KC_Q:
+        case KC_R:
+        case KC_S:
+        case KC_T:
+        case KC_U:
+        case KC_V:
+        case KC_W:
+        case KC_X:
+        case KC_Y:
+        case KC_Z:
+        case KC_LEFT_BRACKET:
+        case KC_RIGHT_BRACKET:
+        case KC_SEMICOLON:
+        case KC_QUOTE:
+        case KC_COMMA:
+        case KC_DOT:
+        case KC_SLASH:
+            return KCC_ALFAS;
+        case KC_1:
+        case KC_2:
+        case KC_3:
+        case KC_4:
+        case KC_5:
+        case KC_6:
+        case KC_7:
+        case KC_8:
+        case KC_9:
+        case KC_0:
+        case KC_MINUS:
+        case KC_EQUAL:
+            return KCC_NUMERICS;
+        case KC_GRAVE:
+        case KC_TAB:
+        case KC_CAPS_LOCK:
+        case CW_TOGG:
+        case KC_LEFT_SHIFT:
+        case KC_LEFT_CTRL:
+        case KC_LWIN:
+        case KC_LEFT_ALT:
+        case KC_SPACE:
+        case KC_RIGHT_ALT:
+        case KC_RIGHT_CTRL:
+        case KC_RIGHT_SHIFT:
+        case KC_BACKSLASH:
+        case KC_BACKSPACE:
+        case KC_INSERT:
+        // One momentary code per layer. More can be added if necessary
+        case QK_MOMENTARY:
+        case QK_MOMENTARY + 1:
+        case QK_MOMENTARY + 2:
+        case QK_MOMENTARY + 3:
+        case QK_MOMENTARY + 4:
+        // Only the first tap dance code. More can be added if necessary
+        case QK_TAP_DANCE:
+            return KCC_MODS;
+        case KC_F1:
+        case KC_F2:
+        case KC_F3:
+        case KC_F4:
+        case KC_F5:
+        case KC_F6:
+        case KC_F7:
+        case KC_F8:
+        case KC_F9:
+        case KC_F10:
+        case KC_F11:
+        case KC_F12:
+            return KCC_FUNCTIONAL;
+        case KC_PGDN:
+        case KC_PGUP:
+        case KC_HOME:
+        case KC_END:
+        case KC_DEL:
+        case KC_PRINT_SCREEN:
+        case KC_LEFT:
+        case KC_UP:
+        case KC_RIGHT:
+        case KC_DOWN:
+            return KCC_NAV;
+        case KC_ESCAPE:
+        case KC_ENTER:
+            return KCC_SPECIAL;
+        default:
+            return KCC_NONE;
     }
+}
 
-    HSV black = {HSV_BLACK};
+static HSV get_keycode_colour(uint16_t keycode) {
 
-    return black;
+    sd_keycode_category keycode_category = get_keycode_category(keycode);
+
+    return keycode_category_colour_mapping[keycode_category];
 }
 
 static bool KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
@@ -69,7 +153,7 @@ static bool KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
             // set only leds in the range
             if (index >= led_min && index < led_max && index != NO_LED) {
 
-                uint8_t keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
+                uint16_t keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
 
                 RGB rgb = hsv_to_rgb(get_keycode_colour(keycode));
 
