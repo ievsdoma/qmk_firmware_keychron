@@ -19,11 +19,11 @@
 #ifdef RGB_MATRIX_ENABLE
 const ckled2001_led PROGMEM g_ckled2001_leds[RGB_MATRIX_LED_COUNT] = {
 /* Refer to IS31 manual for these locations
- *       driver
- *       |  R location
- *       |  |     G location
- *       |  |     |     B location
- *       |  |     |     | */
+ *   driver
+ *   |  R location
+ *   |  |       G location
+ *   |  |       |       B location
+ *   |  |       |       | */
     {0, A_2,  C_2,  B_2},  // ESC
     {0, A_3,  C_3,  B_3},  // F1
     {0, A_4,  C_4,  B_4},  // F2
@@ -50,7 +50,7 @@ const ckled2001_led PROGMEM g_ckled2001_leds[RGB_MATRIX_LED_COUNT] = {
     {0, G_7,  I_7,  H_7},  // T
 
     {0, J_1,  L_1,  K_1},  // M3
-    {0, J_2,  L_2,  K_2},  // CapsLock
+    {0, J_2,  L_2,  K_2},  // CapsJock
     {0, J_3,  L_3,  K_3},  // A
     {0, J_4,  L_4,  K_4},  // S
     {0, J_5,  L_5,  K_5},  // D
