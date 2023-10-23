@@ -35,15 +35,11 @@ static HSV keycode_category_colour_mapping[] = {
     [KCC_SCREEN_BRIGHTNESS] = {HSV_YELLOW},
     [KCC_MEDIA_CONTROLS] = {HSV_BLUE},
     [KCC_VOLUME_CONTROLS] = {HSV_TURQUOISE},
-    [KCC_OTHER] = {HSV_WHITE},
+    [KCC_OTHER] = {HSV_PINK},
     [KCC_NONE] = {HSV_OFF}
 };
 
 static sd_keycode_category get_keycode_category(uint16_t keycode) {
-    if (!rgb_matrix_get_flags()) {
-        return KCC_NONE;
-    }
-
     switch (keycode) {
         case KC_A:
         case KC_B:
