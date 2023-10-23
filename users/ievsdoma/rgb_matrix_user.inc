@@ -1,7 +1,7 @@
-RGB_MATRIX_EFFECT(KEY_CATEGORY_HIGHLIGHT)
+RGB_MATRIX_EFFECT(DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT)
 
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-#include "rgb/key_category_highlight.c"
+#include "rgb/default_layer_key_category_highlight.c"
 
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
