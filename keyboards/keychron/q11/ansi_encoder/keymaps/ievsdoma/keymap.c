@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "indicators.h"
-#include "two_layers_tap_dance.h"
+#include "rgb/indicators.h"
+#include "features/two_layers_tap_dance.h"
 
 #define KC_TASK LGUI(KC_TAB)
 #define KC_FLXP LGUI(KC_E)

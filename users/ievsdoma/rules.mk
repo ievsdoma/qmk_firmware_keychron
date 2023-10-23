@@ -1,5 +1,5 @@
-SRC += indicators.c
-SRC += two_layers_tap_dance.c
+SRC += features/two_layers_tap_dance.c
+SRC += rgb/indicators.c
 SRC += rgb/key_category_highlight.c
 
 VIA_ENABLE = yes
