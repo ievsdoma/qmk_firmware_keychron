@@ -1,5 +1,6 @@
 SRC += indicators.c
 SRC += two_layers_tap_dance.c
+SRC += rgb/key_category_highlight.c
 
 VIA_ENABLE = yes
 ENCODER_MAP_ENABLE = yes

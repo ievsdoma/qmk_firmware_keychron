@@ -1,5 +1,4 @@
 #include "quantum.h"
-#include "two_layers_tap_dance.h"
 #include "colours.h"
 
 typedef enum {
@@ -41,6 +40,10 @@ static HSV keycode_category_colour_mapping[] = {
 };
 
 static sd_keycode_category get_keycode_category(uint16_t keycode) {
+    if (!rgb_matrix_get_flags()) {
+        return KCC_NONE;
+    }
+
     switch (keycode) {
         case KC_A:
         case KC_B:
@@ -196,17 +199,7 @@ static HSV get_keycode_colour(uint16_t keycode) {
     return keycode_category_colour_mapping[keycode_category];
 }
 
-static bool KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
-
-    RGB_MATRIX_USE_LIMITS(led_min, led_max);
-
-    uint8_t layer = get_highest_layer(layer_state);
-
-    if (layer == MAC_BASE) {
-        layer = log(default_layer_state)/log(2);
-    }
-
-    dprintf("KEY_CATEGORY_HIGHLIGHT: Layer %d\n", layer);
+void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max) {
 
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -223,6 +216,4 @@ static bool KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
             }
         }
     }
-
-    return rgb_matrix_check_finished_leds(led_max);
 }
