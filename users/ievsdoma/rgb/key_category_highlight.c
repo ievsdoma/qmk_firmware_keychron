@@ -9,6 +9,15 @@ typedef enum {
     KCC_FUNCTIONAL,
     KCC_NAV,
     KCC_SPECIAL,
+    KCC_RGB_MODE,
+    KCC_RGB_BRIGHTNESS,
+    KCC_RGB_HUE,
+    KCC_RGB_SATURATION,
+    KCC_RGB_SPEED,
+    KCC_SCREEN_BRIGHTNESS,
+    KCC_MEDIA_CONTROLS,
+    KCC_VOLUME_CONTROLS,
+    KCC_OTHER,
     KCC_NONE
 } sd_keycode_category;
 
@@ -19,6 +28,15 @@ static HSV keycode_category_colour_mapping[] = {
     [KCC_FUNCTIONAL] = {HSV_HOT_PINK},
     [KCC_NAV] = {HSV_PURPLE},
     [KCC_SPECIAL] = {HSV_RED},
+    [KCC_RGB_MODE] = {HSV_MAGENTA},
+    [KCC_RGB_BRIGHTNESS] = {HSV_WHITE},
+    [KCC_RGB_HUE] = {HSV_GOLD},
+    [KCC_RGB_SATURATION] = {HSV_CYAN},
+    [KCC_RGB_SPEED] = {HSV_RED},
+    [KCC_SCREEN_BRIGHTNESS] = {HSV_YELLOW},
+    [KCC_MEDIA_CONTROLS] = {HSV_BLUE},
+    [KCC_VOLUME_CONTROLS] = {HSV_TURQUOISE},
+    [KCC_OTHER] = {HSV_WHITE},
     [KCC_NONE] = {HSV_OFF}
 };
 
@@ -68,6 +86,16 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_8:
         case KC_9:
         case KC_0:
+        case KC_KP_1:
+        case KC_KP_2:
+        case KC_KP_3:
+        case KC_KP_4:
+        case KC_KP_5:
+        case KC_KP_6:
+        case KC_KP_7:
+        case KC_KP_8:
+        case KC_KP_9:
+        case KC_KP_0:
         case KC_MINUS:
         case KC_EQUAL:
             return KCC_NUMERICS;
@@ -121,9 +149,43 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
             return KCC_NAV;
         case KC_ESCAPE:
         case KC_ENTER:
+        case KC_NUM_LOCK:
+        case DB_TOGG:
+        case QK_RBT:
+        case EE_CLR:
+        case QK_BOOT:
             return KCC_SPECIAL;
-        default:
+        case KC_BRID:
+        case KC_BRIU:
+            return KCC_SCREEN_BRIGHTNESS;
+        case KC_MPRV:
+        case KC_MPLY:
+        case KC_MNXT:
+            return KCC_MEDIA_CONTROLS;
+        case KC_MUTE:
+        case KC_VOLD:
+        case KC_VOLU:
+            return KCC_VOLUME_CONTROLS;
+        case RGB_MOD:
+        case RGB_RMOD:
+            return KCC_RGB_MODE;
+        case RGB_VAD:
+        case RGB_VAI:
+            return KCC_RGB_BRIGHTNESS;
+        case RGB_HUI:
+        case RGB_HUD:
+            return KCC_RGB_HUE;
+        case RGB_SAI:
+        case RGB_SAD:
+            return KCC_RGB_SATURATION;
+        case RGB_SPI:
+        case RGB_SPD:
+            return KCC_RGB_SPEED;
+        case KC_NO:
+        case KC_TRANSPARENT:
             return KCC_NONE;
+        default:
+            return KCC_OTHER;
     }
 }
 
