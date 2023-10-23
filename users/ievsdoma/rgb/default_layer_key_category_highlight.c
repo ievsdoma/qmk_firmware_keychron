@@ -1,5 +1,5 @@
 #include "quantum.h"
-#include "two_layers_tap_dance.h"
+#include "features/two_layers_tap_dance.h"
 #include "key_category_highlight.h"
 
 static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
