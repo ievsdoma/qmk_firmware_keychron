@@ -206,7 +206,17 @@ void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max) {
 
                 uint16_t keycode = keymap_key_to_keycode(layer, (keypos_t){col,row});
 
-                RGB rgb = hsv_to_rgb(get_keycode_colour(keycode));
+                HSV category_colour = get_keycode_colour(keycode);
+
+                if (category_colour.v == 0) {
+                    continue;
+                }
+
+                category_colour.h = (category_colour.h + rgb_matrix_get_hue()) % 256;
+                category_colour.s = category_colour.s * rgb_matrix_get_sat() / 255;
+                category_colour.v = category_colour.v * rgb_matrix_get_val() / 255;
+
+                RGB rgb = hsv_to_rgb(category_colour);
 
                 rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
             }
