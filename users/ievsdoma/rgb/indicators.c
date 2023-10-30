@@ -38,20 +38,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 
 bool rgb_matrix_was_disabled = false;
-HSV last_colour_hsv;
+led_flags_t rgb_matrix_previous_flags = LED_FLAG_NONE;
 
 void ensure_rgb_matrix_enabled(bool desired_state) {
     if (desired_state) {
         if (!rgb_matrix_is_enabled()) {
             rgb_matrix_was_disabled = true;
-            last_colour_hsv = rgb_matrix_get_hsv();
             rgb_matrix_enable_noeeprom();
-            rgb_matrix_sethsv_noeeprom(HSV_OFF);
+            rgb_matrix_previous_flags = rgb_matrix_get_flags();
+            rgb_matrix_set_flags_noeeprom(LED_FLAG_NONE);
         }
     } else {
         if (rgb_matrix_was_disabled) {
             rgb_matrix_was_disabled = false;
-            rgb_matrix_sethsv_noeeprom(last_colour_hsv.h, last_colour_hsv.s, last_colour_hsv.v);
+            rgb_matrix_set_flags_noeeprom(rgb_matrix_previous_flags);
             rgb_matrix_disable_noeeprom();
         }
     }
