@@ -7,13 +7,21 @@
         RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
     }
 
+uint8_t last_layer_number = 0;
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     bool continue_led_processing = true;
 
     uint8_t layer = get_highest_layer(layer_state);
     if (layer > 0) {
         key_category_highlight(layer, led_min, led_max);
+    } else if (!rgb_matrix_get_flags() && last_layer_number > 0) {
+        rgb_matrix_set_color_all(RGB_OFF);
+
+        continue_led_processing = false;
     }
+
+    last_layer_number = layer;
 
     if(is_caps_word_on()){
         RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(255, 0, 0);
@@ -30,20 +38,20 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 
 bool rgb_matrix_was_disabled = false;
-HSV last_colour_hsv;
+led_flags_t rgb_matrix_previous_flags = LED_FLAG_NONE;
 
 void ensure_rgb_matrix_enabled(bool desired_state) {
     if (desired_state) {
         if (!rgb_matrix_is_enabled()) {
             rgb_matrix_was_disabled = true;
-            last_colour_hsv = rgb_matrix_get_hsv();
             rgb_matrix_enable_noeeprom();
-            rgb_matrix_sethsv_noeeprom(HSV_OFF);
+            rgb_matrix_previous_flags = rgb_matrix_get_flags();
+            rgb_matrix_set_flags_noeeprom(LED_FLAG_NONE);
         }
     } else {
         if (rgb_matrix_was_disabled) {
             rgb_matrix_was_disabled = false;
-            rgb_matrix_sethsv_noeeprom(last_colour_hsv.h, last_colour_hsv.s, last_colour_hsv.v);
+            rgb_matrix_set_flags_noeeprom(rgb_matrix_previous_flags);
             rgb_matrix_disable_noeeprom();
         }
     }
