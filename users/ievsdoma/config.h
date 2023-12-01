@@ -1,5 +1,7 @@
 #pragma once
 
+#define MK_3_SPEED
+
 #define AUTO_SHIFT_TIMEOUT 160
 #define CAPS_WORD_INVERT_ON_SHIFT
 #define CAPS_WORD_IDLE_TIMEOUT 3000
