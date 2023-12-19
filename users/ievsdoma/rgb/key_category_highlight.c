@@ -1,5 +1,7 @@
 #include "quantum.h"
+#include <lib/lib8tion/lib8tion.h>
 #include "colours.h"
+#include "key_category_highlight.h"
 
 typedef enum {
     KCC_ALFAS = 0,
@@ -195,7 +197,9 @@ static HSV get_keycode_colour(uint16_t keycode) {
     return keycode_category_colour_mapping[keycode_category];
 }
 
-void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max) {
+void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max, colour_processor colour_processor_func) {
+
+    uint8_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 4);
 
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
@@ -212,11 +216,9 @@ void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max) {
                     continue;
                 }
 
-                category_colour.h = (category_colour.h + rgb_matrix_get_hue()) % 256;
-                category_colour.s = category_colour.s * rgb_matrix_get_sat() / 255;
-                category_colour.v = category_colour.v * rgb_matrix_get_val() / 255;
+                HSV adjusted_category_colour = colour_processor_func(category_colour, index, time);
 
-                RGB rgb = hsv_to_rgb(category_colour);
+                RGB rgb = hsv_to_rgb(adjusted_category_colour);
 
                 rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
             }
