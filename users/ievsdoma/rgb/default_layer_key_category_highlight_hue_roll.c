@@ -9,9 +9,10 @@ static HSV BAND_SAT_math(HSV input, uint8_t i, uint8_t time) {
     output.s = scale8(input.s, rgb_matrix_get_sat());
     output.v = scale8(input.v, rgb_matrix_get_val());
 
-    int16_t h = abs(scale8(g_led_config.point[i].x, 228) + 28 - time) * 8;
-    output.h = (output.h + (h > 255 ? 0 : h)) % 256;
-    output.s = h < 255 ? 255 : output.s;
+    int16_t h = (scale8(g_led_config.point[i].x, 228) + 28 - time) * 4;
+    bool use_effect_hue = (0 <= h) && (h <=255);
+    output.h = (output.h + (use_effect_hue ? h : 0)) % 256;
+    output.s = use_effect_hue ? 255 : output.s;
     return output;
 }
 
