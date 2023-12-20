@@ -3,15 +3,18 @@
 #include "features/two_layers_tap_dance.h"
 #include "key_category_highlight.h"
 
-static HSV apply_rgb_matrix_settings(HSV input, uint8_t i, uint8_t time) {
+static HSV BAND_VAL_math(HSV input, uint8_t i, uint8_t time) {
     HSV output;
     output.h = (input.h + rgb_matrix_get_hue()) % 256;
     output.s = scale8(input.s, rgb_matrix_get_sat());
     output.v = scale8(input.v, rgb_matrix_get_val());
+
+    int16_t v = abs(scale8(g_led_config.point[i].x, 228) + 28 - time) * 8;
+    output.v = scale8(v > 255 ? 255 : v, output.v);
     return output;
 }
 
-static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
+static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT_VAL_ROLL(effect_params_t* params) {
 
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
@@ -23,7 +26,7 @@ static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
 
         dprintf("DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT: Layer %d\n", layer);
 
-        key_category_highlight(layer, led_min, led_max, &apply_rgb_matrix_settings);
+        key_category_highlight(layer, led_min, led_max, &BAND_VAL_math);
     }
 
     return rgb_matrix_check_finished_leds(led_max);
