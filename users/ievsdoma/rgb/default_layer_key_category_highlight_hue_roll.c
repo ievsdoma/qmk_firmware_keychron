@@ -3,15 +3,20 @@
 #include "features/two_layers_tap_dance.h"
 #include "key_category_highlight.h"
 
-static HSV apply_rgb_matrix_settings(HSV input, uint8_t i, uint8_t time) {
+static HSV BAND_SAT_math(HSV input, uint8_t i, uint8_t time) {
     HSV output;
     output.h = (input.h + rgb_matrix_get_hue()) % 256;
     output.s = scale8(input.s, rgb_matrix_get_sat());
     output.v = scale8(input.v, rgb_matrix_get_val());
+
+    int16_t h = (scale8(g_led_config.point[i].x, 228) + 28 - time) * 4;
+    bool use_effect_hue = (0 <= h) && (h <=255);
+    output.h = (output.h + (use_effect_hue ? h : 0)) % 256;
+    output.s = use_effect_hue ? 255 : output.s;
     return output;
 }
 
-static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
+static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT_HUE_ROLL(effect_params_t* params) {
 
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
@@ -23,7 +28,7 @@ static bool DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT(effect_params_t* params) {
 
         dprintf("DEFAULT_LAYER_KEY_CATEGORY_HIGHLIGHT: Layer %d\n", layer);
 
-        key_category_highlight(layer, led_min, led_max, &apply_rgb_matrix_settings);
+        key_category_highlight(layer, led_min, led_max, &BAND_SAT_math);
     }
 
     return rgb_matrix_check_finished_leds(led_max);
