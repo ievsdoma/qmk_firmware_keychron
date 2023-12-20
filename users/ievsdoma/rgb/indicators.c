@@ -53,16 +53,18 @@ led_flags_t rgb_matrix_previous_flags = LED_FLAG_NONE;
 
 uint32_t ensure_rgb_matrix_enabled_worker(uint32_t trigger_time, void *cb_arg) {
     if (!rgb_matrix_is_enabled()) {
-        dprintf("ensure_rgb_matrix_enabled: rgb off");
+        dprintln("ensure_rgb_matrix_enabled: rgb off");
         if (!i_turned_on_led) {
-            dprintf("ensure_rgb_matrix_enabled: I didn't turn on rgb");
+            dprintln("ensure_rgb_matrix_enabled: I didn't turn on rgb");
             rgb_matrix_enable_noeeprom();
             rgb_matrix_previous_flags = rgb_matrix_get_flags();
+            dprintf("ensure_rgb_matrix_enabled: Remembered previous flags %d\n", rgb_matrix_previous_flags);
             rgb_matrix_set_flags_noeeprom(LED_FLAG_NONE);
             i_turned_on_led = true;
         } else {
-            dprintf("ensure_rgb_matrix_enabled: I turned on rgb");
+            dprintln("ensure_rgb_matrix_enabled: I turned on rgb");
             rgb_matrix_enable();
+            dprintf("ensure_rgb_matrix_enabled: Setting previous flags %d\n", rgb_matrix_previous_flags);
             rgb_matrix_set_flags(rgb_matrix_previous_flags);
             i_turned_on_led = false;
         }
@@ -86,7 +88,7 @@ void ensure_rgb_matrix_enabled(bool desired_state) {
             worker_token = 0;
         }
         if (i_turned_on_led) {
-            dprintf("ensure_rgb_matrix_enabled: Restore after I turned on rgb");
+            dprintln("ensure_rgb_matrix_enabled: Restore after I turned on rgb");
             rgb_matrix_reload_from_eeprom();
             i_turned_on_led = false;
         }
