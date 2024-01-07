@@ -1,4 +1,5 @@
-#include QMK_KEYBOARD_H
+#include "quantum.h"
+#include <timer.h>
 #include <lib/lib8tion/lib8tion.h>
 #include "indicators.h"
 #include "key_category_highlight.h"
@@ -10,7 +11,7 @@
         RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
     }
 
-uint8_t last_layer_number = 0;
+static uint8_t last_layer_number = 0;
 
 static HSV apply_rgb_matrix_value_and_hue(HSV input, uint8_t i, uint8_t time) {
     HSV output;
@@ -48,9 +49,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     return continue_led_processing;
 }
 
-bool i_turned_on_led = false;
+static bool i_turned_on_led = false;
 
-uint32_t ensure_rgb_matrix_enabled_worker(uint32_t trigger_time, void *cb_arg) {
+static void ensure_rgb_matrix_enabled_worker(void) {
     if (!rgb_matrix_is_enabled()) {
         dprintln("ensure_rgb_matrix_enabled: rgb off");
         if (!i_turned_on_led) {
@@ -65,24 +66,18 @@ uint32_t ensure_rgb_matrix_enabled_worker(uint32_t trigger_time, void *cb_arg) {
             i_turned_on_led = false;
         }
     }
-
-    return RGB_TOGGLE_CHECK_RATE;
 }
 
-deferred_token worker_token = 0;
+static bool maintain_rgb_matrix_enabled = false;
 
-void ensure_rgb_matrix_enabled(bool desired_state) {
+static void ensure_rgb_matrix_enabled(bool desired_state) {
     if (desired_state) {
         dprintln("ensure_rgb_matrix_enabled: Starting worker");
-        if (!worker_token) {
-            worker_token = defer_exec(1, ensure_rgb_matrix_enabled_worker, NULL);
-        }
+        maintain_rgb_matrix_enabled = true;
     } else {
-        if (worker_token) {
-            dprintln("ensure_rgb_matrix_enabled: Stopping worker");
-            cancel_deferred_exec(worker_token);
-            worker_token = 0;
-        }
+        dprintln("ensure_rgb_matrix_enabled: Stopping worker");
+        maintain_rgb_matrix_enabled = false;
+
         if (i_turned_on_led) {
             dprintln("ensure_rgb_matrix_enabled: Restore after I turned on rgb");
             rgb_matrix_reload_from_eeprom();
@@ -99,4 +94,15 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     ensure_rgb_matrix_enabled(get_highest_layer(state) > 0);
 
     return state;
+}
+
+static uint32_t last_execution_time = 0;
+
+// We are not using deferred exec as Keychron's implementation of Bluetooth
+// resets RGB matrix state from EEPROM in housekeeping_task_kb if there are no indicators enabled
+void housekeeping_task_user(void) {
+    if (maintain_rgb_matrix_enabled && timer_elapsed32(last_execution_time) > RGB_TOGGLE_CHECK_RATE) {
+        ensure_rgb_matrix_enabled_worker();
+        last_execution_time = timer_read32();
+    }
 }

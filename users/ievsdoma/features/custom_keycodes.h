@@ -1,6 +1,6 @@
 #pragma once
 
-#include QMK_KEYBOARD_H
+#include "quantum.h"
 
 enum custom_keycodes {
     FAST_SCROLL_UP = SAFE_RANGE,
