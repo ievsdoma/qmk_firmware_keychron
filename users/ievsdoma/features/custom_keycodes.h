@@ -16,3 +16,5 @@ enum custom_keycodes {
     FAST_SCROLL_PRINT_SPEED,
     FS_PRNS
 };
+
+bool process_record_custom(uint16_t keycode, keyrecord_t *record);

@@ -74,3 +74,10 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [SYSTEM_CMD] = {ENCODER_CCW_CW(RGB_RMOD, RGB_MOD)},
 };
 #endif // ENCODER_MAP_ENABLE
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_record_custom(keycode, record)) {
+        return false;
+    }
+    return true;
+}
