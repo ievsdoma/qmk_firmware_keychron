@@ -186,6 +186,9 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_TRANSPARENT:
             return KCC_NONE;
         default:
+            if (QK_MOD_TAP <= keycode && keycode <= QK_MOD_TAP_MAX) {
+                return get_keycode_category(keycode&0xFF);
+            }
             return KCC_OTHER;
     }
 }
