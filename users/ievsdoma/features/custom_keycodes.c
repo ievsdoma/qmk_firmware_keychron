@@ -22,7 +22,7 @@ void print_fast_scroll_speed(void) {
 #    endif
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_custom(uint16_t keycode, keyrecord_t *record) {
     uint16_t scroll_code;
 
     if (!record->event.pressed) {
