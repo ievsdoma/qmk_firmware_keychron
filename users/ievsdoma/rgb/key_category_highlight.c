@@ -6,6 +6,7 @@
 typedef enum {
     KCC_ALFAS = 0,
     KCC_NUMERICS,
+    KCC_MATH,
     KCC_MODS,
     KCC_FUNCTIONAL,
     KCC_NAV,
@@ -25,6 +26,7 @@ typedef enum {
 static HSV keycode_category_colour_mapping[] = {
     [KCC_ALFAS] = {HSV_AZURE},
     [KCC_NUMERICS] = {HSV_GREEN},
+    [KCC_MATH] = {HSV_PURPLE},
     [KCC_MODS] = {HSV_BLUE},
     [KCC_FUNCTIONAL] = {HSV_HOT_PINK},
     [KCC_NAV] = {HSV_PURPLE},
@@ -97,9 +99,17 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_KP_8:
         case KC_KP_9:
         case KC_KP_0:
+            return KCC_NUMERICS;
         case KC_MINUS:
         case KC_EQUAL:
-            return KCC_NUMERICS;
+        case KC_KP_MINUS:
+        case KC_KP_PLUS:
+        case KC_KP_SLASH:
+        case KC_KP_EQUAL:
+        case KC_KP_ASTERISK:
+        case KC_KP_COMMA:
+        case KC_KP_DOT:
+            return KCC_MATH;
         case KC_GRAVE:
         case KC_TAB:
         case KC_CAPS_LOCK:
@@ -150,6 +160,7 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
             return KCC_NAV;
         case KC_ESCAPE:
         case KC_ENTER:
+        case KC_KP_ENTER:
         case KC_NUM_LOCK:
         case DB_TOGG:
         case QK_RBT:
