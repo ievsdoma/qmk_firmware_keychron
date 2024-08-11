@@ -46,7 +46,7 @@ static HSV keycode_category_colour_mapping[] = {
     [KCC_VOLUME_CONTROLS] = {HSV_TURQUOISE},
     [KCC_OTHER] = {HSV_PINK},
     [KCC_BLUETOOTH] = {HSV_BLUE},
-    [KCC_WIRELESS] = {HSV_GREEN},
+    [KCC_WIRELESS] = {HSV_YELLOW},
     [KCC_NONE] = {HSV_OFF}
 };
 
