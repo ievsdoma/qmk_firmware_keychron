@@ -12,6 +12,7 @@ typedef enum {
     KCC_FUNCTIONAL,
     KCC_NAV,
     KCC_SPECIAL,
+    KCC_QDEV,
     KCC_RGB_MODE,
     KCC_RGB_BRIGHTNESS,
     KCC_RGB_HUE,
@@ -34,6 +35,7 @@ static HSV keycode_category_colour_mapping[] = {
     [KCC_FUNCTIONAL] = {HSV_HOT_PINK},
     [KCC_NAV] = {HSV_PURPLE},
     [KCC_SPECIAL] = {HSV_RED},
+    [KCC_QDEV] = {HSV_RED},
     [KCC_RGB_MODE] = {HSV_MAGENTA},
     [KCC_RGB_BRIGHTNESS] = {HSV_WHITE},
     [KCC_RGB_HUE] = {HSV_GOLD},
@@ -172,11 +174,12 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_ENTER:
         case KC_KP_ENTER:
         case KC_NUM_LOCK:
+            return KCC_SPECIAL;
         case DB_TOGG:
         case QK_RBT:
         case EE_CLR:
         case QK_BOOT:
-            return KCC_SPECIAL;
+            return KCC_QDEV;
         case KC_BRID:
         case KC_BRIU:
             return KCC_SCREEN_BRIGHTNESS;
@@ -231,7 +234,7 @@ static bool should_apply_colour_processing(uint8_t keycode_category) {
     switch (keycode_category) {
         case KCC_BLUETOOTH:
         case KCC_WIRELESS:
-        case KCC_SPECIAL:
+        case KCC_QDEV:
             return false;
         default:
             return true;
