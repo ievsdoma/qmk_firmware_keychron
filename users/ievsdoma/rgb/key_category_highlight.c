@@ -1,4 +1,5 @@
 #include "quantum.h"
+#include "keychron_common.h"
 #include <lib/lib8tion/lib8tion.h>
 #include "colours.h"
 #include "key_category_highlight.h"
@@ -20,6 +21,8 @@ typedef enum {
     KCC_MEDIA_CONTROLS,
     KCC_VOLUME_CONTROLS,
     KCC_OTHER,
+    KCC_BLUETOOTH,
+    KCC_WIRELESS,
     KCC_NONE
 } sd_keycode_category;
 
@@ -40,8 +43,14 @@ static HSV keycode_category_colour_mapping[] = {
     [KCC_MEDIA_CONTROLS] = {HSV_BLUE},
     [KCC_VOLUME_CONTROLS] = {HSV_TURQUOISE},
     [KCC_OTHER] = {HSV_PINK},
+    [KCC_BLUETOOTH] = {HSV_BLUE},
+    [KCC_WIRELESS] = {HSV_GREEN},
     [KCC_NONE] = {HSV_OFF}
 };
+
+static uint8_t get_numpad_category(uint16_t keycode) {
+    return host_keyboard_led_state().num_lock ? KCC_NUMERICS : KCC_NAV;
+}
 
 static sd_keycode_category get_keycode_category(uint16_t keycode) {
     switch (keycode) {
@@ -89,6 +98,7 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_8:
         case KC_9:
         case KC_0:
+            return KCC_NUMERICS;
         case KC_KP_1:
         case KC_KP_2:
         case KC_KP_3:
@@ -99,7 +109,7 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_KP_8:
         case KC_KP_9:
         case KC_KP_0:
-            return KCC_NUMERICS;
+            return get_numpad_category(keycode);
         case KC_MINUS:
         case KC_EQUAL:
         case KC_KP_MINUS:
@@ -193,6 +203,12 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case RGB_SPI:
         case RGB_SPD:
             return KCC_RGB_SPEED;
+        case BT_HST1:
+        case BT_HST2:
+        case BT_HST3:
+            return KCC_BLUETOOTH;
+        case P2P4G:
+            return KCC_WIRELESS;
         case KC_NO:
         case KC_TRANSPARENT:
             return KCC_NONE;
@@ -209,6 +225,17 @@ static HSV get_keycode_colour(uint16_t keycode) {
     sd_keycode_category keycode_category = get_keycode_category(keycode);
 
     return keycode_category_colour_mapping[keycode_category];
+}
+
+static bool should_apply_colour_processing(uint8_t keycode_category) {
+    switch (keycode_category) {
+        case KCC_BLUETOOTH:
+        case KCC_WIRELESS:
+        case KCC_SPECIAL:
+            return false;
+        default:
+            return true;
+    }
 }
 
 void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max, colour_processor colour_processor_func) {
@@ -230,7 +257,9 @@ void key_category_highlight(uint8_t layer, uint8_t led_min, uint8_t led_max, col
                     continue;
                 }
 
-                HSV adjusted_category_colour = colour_processor_func(category_colour, index, time);
+                HSV adjusted_category_colour = should_apply_colour_processing(get_keycode_category(keycode))
+                                                    ? colour_processor_func(category_colour, index, time)
+                                                    : category_colour;
 
                 RGB rgb = hsv_to_rgb(adjusted_category_colour);
 
