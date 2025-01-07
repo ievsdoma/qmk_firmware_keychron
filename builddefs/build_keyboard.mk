@@ -186,7 +186,10 @@ endif
 # Have we found a keymap.json?
 ifneq ("$(wildcard $(KEYMAP_JSON))", "")
     ifneq ("$(wildcard $(KEYMAP_C))", "")
-        $(call WARNING_MESSAGE,Keymap is specified as both keymap.json and keymap.c -- keymap.json file wins.)
+        # Allow a separately-found keymap.c next to keymap.json -- the keymap.c
+        # generator will include the other keymap.c in the process, if supplied.
+        OTHER_KEYMAP_C := $(KEYMAP_C)
+        OPT_DEFS += -DOTHER_KEYMAP_C=\"$(OTHER_KEYMAP_C)\"
     endif
 
     KEYMAP_PATH := $(KEYMAP_JSON_PATH)
@@ -212,7 +215,12 @@ $(INTERMEDIATE_OUTPUT)/src/config.h: $(KEYMAP_JSON)
 	$(eval CMD=$(QMK_BIN) generate-config-h --quiet --output $(KEYMAP_H) $(KEYMAP_JSON))
 	@$(BUILD_CMD)
 
-generated-files: $(INTERMEDIATE_OUTPUT)/src/config.h $(INTERMEDIATE_OUTPUT)/src/keymap.c
+$(INTERMEDIATE_OUTPUT)/src/keymap.h: $(KEYMAP_JSON)
+	@$(SILENT) || printf "$(MSG_GENERATING) $@" | $(AWK_CMD)
+	$(eval CMD=$(QMK_BIN) generate-keymap-h --quiet --output $(INTERMEDIATE_OUTPUT)/src/keymap.h $(KEYMAP_JSON))
+	@$(BUILD_CMD)
+
+generated-files: $(INTERMEDIATE_OUTPUT)/src/config.h $(INTERMEDIATE_OUTPUT)/src/keymap.c $(INTERMEDIATE_OUTPUT)/src/keymap.h
 
 endif
 
