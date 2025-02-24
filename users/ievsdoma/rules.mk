@@ -8,5 +8,8 @@ ENCODER_MAP_ENABLE = yes
 AUTO_SHIFT_ENABLE = yes
 CAPS_WORD_ENABLE = yes
 # TAP_DANCE_ENABLE = yes
-# CONSOLE_ENABLE = yes
 RGB_MATRIX_CUSTOM_USER = yes
+# Uncomment for console
+# CONSOLE_ENABLE = yes
+# VIA_ENABLE = no
+# RAW_ENABLE = no
