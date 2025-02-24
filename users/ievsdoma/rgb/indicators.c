@@ -6,12 +6,15 @@
 
 #define RGB_TOGGLE_CHECK_RATE 100
 
+#define RGB_MATRIX_CLEAR_ALL() \
+    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++) { \
+        RGB_MATRIX_INDICATOR_SET_COLOR(i, 0, 0, 0); \
+    }
+
 #define RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(r, g, b) \
     for (uint8_t led = 0; led < g_caps_indicators_count; led++) { \
         RGB_MATRIX_INDICATOR_SET_COLOR(g_caps_indicators[led], r, g, b); \
     }
-
-static uint8_t last_layer_number = 0;
 
 static HSV apply_rgb_matrix_value_and_hue(HSV input, uint8_t i, uint8_t time) {
     HSV output;
@@ -24,24 +27,17 @@ static HSV apply_rgb_matrix_value_and_hue(HSV input, uint8_t i, uint8_t time) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     bool continue_led_processing = true;
 
+    if (!rgb_matrix_get_flags()) {
+        RGB_MATRIX_CLEAR_ALL();
+    }
+
     uint8_t layer = get_highest_layer(layer_state);
     if (layer > 0) {
         key_category_highlight(layer, led_min, led_max, &apply_rgb_matrix_value_and_hue);
-    } else if (!rgb_matrix_get_flags() && last_layer_number > 0) {
-        rgb_matrix_set_color_all(RGB_OFF);
-
-        continue_led_processing = false;
     }
 
-    last_layer_number = layer;
-
-    if(is_caps_word_on()){
+    if(is_caps_word_on()) {
         RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(255, 0, 0);
-
-        continue_led_processing = false;
-
-    } else if (!rgb_matrix_get_flags()) {
-        RGB_MATRIX_CAPS_INDICATORS_SET_COLOR(0, 0, 0);
 
         continue_led_processing = false;
     }
@@ -68,17 +64,21 @@ static void ensure_rgb_matrix_enabled_worker(void) {
     }
 }
 
-static bool maintain_rgb_matrix_enabled = false;
+static uint8_t maintain_rgb_matrix_enabled_requests = 0;
 
 static void ensure_rgb_matrix_enabled(bool desired_state) {
     if (desired_state) {
         dprintln("ensure_rgb_matrix_enabled: Starting worker");
-        maintain_rgb_matrix_enabled = true;
+        maintain_rgb_matrix_enabled_requests++;
+        dprintf("ensure_rgb_matrix_enabled: desired_state: true, maintain_rgb_matrix_enabled_requests: %d\n", maintain_rgb_matrix_enabled_requests);
     } else {
         dprintln("ensure_rgb_matrix_enabled: Stopping worker");
-        maintain_rgb_matrix_enabled = false;
+        if (maintain_rgb_matrix_enabled_requests) {
+            maintain_rgb_matrix_enabled_requests--;
+        }
+        dprintf("ensure_rgb_matrix_enabled: desired_state: false, maintain_rgb_matrix_enabled_requests: %d\n", maintain_rgb_matrix_enabled_requests);
 
-        if (i_turned_on_led) {
+        if (!maintain_rgb_matrix_enabled_requests && i_turned_on_led) {
             dprintln("ensure_rgb_matrix_enabled: Restore after I turned on rgb");
             rgb_matrix_reload_from_eeprom();
             i_turned_on_led = false;
@@ -101,7 +101,7 @@ static uint32_t last_execution_time = 0;
 // We are not using deferred exec as Keychron's implementation of Bluetooth
 // resets RGB matrix state from EEPROM in housekeeping_task_kb if there are no indicators enabled
 void housekeeping_task_user(void) {
-    if (maintain_rgb_matrix_enabled && timer_elapsed32(last_execution_time) > RGB_TOGGLE_CHECK_RATE) {
+    if (maintain_rgb_matrix_enabled_requests && timer_elapsed32(last_execution_time) > RGB_TOGGLE_CHECK_RATE) {
         ensure_rgb_matrix_enabled_worker();
         last_execution_time = timer_read32();
     }
