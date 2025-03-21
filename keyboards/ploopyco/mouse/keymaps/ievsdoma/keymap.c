@@ -20,13 +20,13 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(/* Base */
-                 KC_BTN4,       KC_BTN1, KC_BTN3, KC_BTN2,      KC_BTN5,        MO(2),      MO(1),      _______),
+                KC_WWW_REFRESH, KC_BTN1, KC_BTN3, KC_BTN2,      KC_ESC,     LT(2, KC_BTN4), LT(1, KC_BTN5), _______),
     [1] = LAYOUT(/* Base */
-                 C(S(KC_TAB)),  C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(3),      _______,    _______),
+                 C(S(KC_TAB)),  C(KC_C), _______, C(KC_V),      C(KC_TAB),  MO(3),          _______,        _______),
     [2] = LAYOUT(/* Base */
-                 KC_ESC,        KC_HOME, _______, KC_END,       KC_WWW_REFRESH, _______,    MO(3),      DPI_CONFIG),
+                C(KC_W),        KC_HOME, _______, KC_END,       C(S(KC_T)), _______,        MO(3),          DPI_CONFIG),
     [3] = LAYOUT(/* Base */
-                 _______,       C(KC_W), _______, C(S(KC_T)),   _______,        _______,    _______,    QK_BOOT),
+                 _______,       C(KC_W), _______, C(S(KC_T)),   _______,    _______,        _______,        QK_BOOT),
 };
 
 #if defined(ENCODER_MAP_ENABLE)

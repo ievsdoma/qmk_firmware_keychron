@@ -30,6 +30,18 @@ bool process_record_custom(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+        case LT(2, KC_BTN4):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_BTN4);
+                return false;
+            }
+            return true;
+        case LT(1, KC_BTN5):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_BTN5);
+                return false;
+            }
+            return true;
         case FAST_SCROLL_UP:
         case FS_UP:
             scroll_code = scroll_is_vertical ? KC_MS_WH_UP : KC_MS_WH_LEFT;
