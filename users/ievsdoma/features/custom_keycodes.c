@@ -40,6 +40,14 @@ bool process_record_custom(uint16_t keycode, keyrecord_t *record) {
             scroll_code = scroll_is_vertical ? KC_MS_WH_DOWN : KC_MS_WH_RIGHT;
             FAST_SCROLL(scroll_code);
             return false;
+        case FAST_SCROLL_LEFT:
+        case FS_LEFT:
+            FAST_SCROLL(KC_MS_WH_LEFT);
+            return false;
+        case FAST_SCROLL_RIGHT:
+        case FS_RIGHT:
+            FAST_SCROLL(KC_MS_WH_RIGHT);
+            return false;
         case FAST_SCROLL_CHANGE_DIRECTION:
         case FS_CDIR:
             scroll_is_vertical = !scroll_is_vertical;
