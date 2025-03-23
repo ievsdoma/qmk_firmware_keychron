@@ -22,7 +22,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(/* Base */
                 KC_WWW_REFRESH, KC_BTN1, KC_BTN3, KC_BTN2,      RCTL_T(KC_ESC), LT(2, KC_BTN4), LT(1, KC_BTN5), _______),
     [1] = LAYOUT(/* Base */
-                C(S(KC_TAB)),   C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(3),          _______,        _______),
+                C(S(KC_TAB)),   C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(3),          _______,        EE_CLR),
     [2] = LAYOUT(/* Base */
                 C(S(KC_T)),     KC_HOME, _______, KC_END,       C(KC_W),        _______,        MO(3),          DPI_CONFIG),
     [3] = LAYOUT(/* Base */
@@ -32,7 +32,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [0] = { ENCODER_CCW_CW(KC_MS_WH_DOWN, KC_MS_WH_UP) },
-    [1] = { ENCODER_CCW_CW(KC_MS_WH_RIGHT, KC_MS_WH_LEFT) },
+    [1] = { ENCODER_CCW_CW(FAST_SCROLL_RIGHT, FAST_SCROLL_LEFT) },
     [2] = { ENCODER_CCW_CW(FAST_SCROLL_DOWN, FAST_SCROLL_UP) },
     [3] = { ENCODER_CCW_CW(KC_MS_WH_DOWN, KC_MS_WH_UP) },
 };
