@@ -32,21 +32,21 @@ bool process_record_custom(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case FAST_SCROLL_UP:
         case FS_UP:
-            scroll_code = scroll_is_vertical ? KC_MS_WH_UP : KC_MS_WH_LEFT;
+            scroll_code = scroll_is_vertical ? QK_MOUSE_WHEEL_UP : QK_MOUSE_WHEEL_LEFT;
             FAST_SCROLL(scroll_code);
             return false; // Skip all further processing of this key
         case FAST_SCROLL_DOWN:
         case FS_DOWN:
-            scroll_code = scroll_is_vertical ? KC_MS_WH_DOWN : KC_MS_WH_RIGHT;
+            scroll_code = scroll_is_vertical ? QK_MOUSE_WHEEL_DOWN : QK_MOUSE_WHEEL_RIGHT;
             FAST_SCROLL(scroll_code);
             return false;
         case FAST_SCROLL_LEFT:
         case FS_LEFT:
-            FAST_SCROLL(KC_MS_WH_LEFT);
+            FAST_SCROLL(QK_MOUSE_WHEEL_LEFT);
             return false;
         case FAST_SCROLL_RIGHT:
         case FS_RIGHT:
-            FAST_SCROLL(KC_MS_WH_RIGHT);
+            FAST_SCROLL(QK_MOUSE_WHEEL_RIGHT);
             return false;
         case FAST_SCROLL_CHANGE_DIRECTION:
         case FS_CDIR:
