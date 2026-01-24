@@ -19,22 +19,25 @@
 #include "features/custom_keycodes.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT(/* Base */
-                KC_WWW_REFRESH, MS_BTN1, MS_BTN3, MS_BTN2,      RCTL_T(KC_ESC), LT(2, MS_BTN4), LT(1, MS_BTN5), _______),
-    [1] = LAYOUT(/* Base */
-                C(S(KC_TAB)),   C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(3),          _______,        EE_CLR),
-    [2] = LAYOUT(/* Base */
-                C(S(KC_T)),     KC_HOME, _______, KC_END,       C(KC_W),        _______,        MO(3),          DPI_CONFIG),
-    [3] = LAYOUT(/* Base */
+    [0] = LAYOUT(/* Base 1*/
+                KC_WWW_REFRESH, MS_BTN1, MS_BTN3, MS_BTN2,      RCTL_T(KC_ESC), LT(3, MS_BTN4), LT(2, MS_BTN5), PDF(1)),
+    [1] = LAYOUT(/* Base 2*/
+                KC_LSFT,        MS_BTN1, MS_BTN3, MS_BTN2,      RCTL_T(KC_ESC), LT(3, MS_BTN4), LT(2, MS_BTN5), PDF(0)),
+    [2] = LAYOUT(/* Advanced */
+                C(S(KC_TAB)),   C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(4),          _______,        EE_CLR),
+    [3] = LAYOUT(/* Special */
+                C(S(KC_T)),     KC_HOME, _______, KC_END,       C(KC_W),        _______,        MO(4),          DPI_CONFIG),
+    [4] = LAYOUT(/* Maintenance */
                 _______,        C(KC_W), _______, C(S(KC_T)),   _______,        _______,        _______,        QK_BOOT),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [0] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
-    [1] = { ENCODER_CCW_CW(FAST_SCROLL_RIGHT, FAST_SCROLL_LEFT) },
-    [2] = { ENCODER_CCW_CW(FAST_SCROLL_DOWN, FAST_SCROLL_UP) },
-    [3] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
+    [1] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
+    [2] = { ENCODER_CCW_CW(FAST_SCROLL_RIGHT, FAST_SCROLL_LEFT) },
+    [3] = { ENCODER_CCW_CW(FAST_SCROLL_DOWN, FAST_SCROLL_UP) },
+    [4] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
 };
 #endif // ENCODER_MAP_ENABLE
 
