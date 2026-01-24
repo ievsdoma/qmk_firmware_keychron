@@ -191,20 +191,20 @@ static sd_keycode_category get_keycode_category(uint16_t keycode) {
         case KC_VOLD:
         case KC_VOLU:
             return KCC_VOLUME_CONTROLS;
-        case RGB_MOD:
-        case RGB_RMOD:
+        case RM_NEXT:
+        case RM_PREV:
             return KCC_RGB_MODE;
-        case RGB_VAD:
-        case RGB_VAI:
+        case RM_VALD:
+        case RM_VALU:
             return KCC_RGB_BRIGHTNESS;
-        case RGB_HUI:
-        case RGB_HUD:
+        case RM_HUEU:
+        case RM_HUED:
             return KCC_RGB_HUE;
-        case RGB_SAI:
-        case RGB_SAD:
+        case RM_SATU:
+        case RM_SATD:
             return KCC_RGB_SATURATION;
-        case RGB_SPI:
-        case RGB_SPD:
+        case RM_SPDU:
+        case RM_SPDD:
             return KCC_RGB_SPEED;
         // case BT_HST1:
         // case BT_HST2:

@@ -20,7 +20,7 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(/* Base */
-                KC_WWW_REFRESH, KC_BTN1, KC_BTN3, KC_BTN2,      RCTL_T(KC_ESC), LT(2, KC_BTN4), LT(1, KC_BTN5), _______),
+                KC_WWW_REFRESH, MS_BTN1, MS_BTN3, MS_BTN2,      RCTL_T(KC_ESC), LT(2, MS_BTN4), LT(1, MS_BTN5), _______),
     [1] = LAYOUT(/* Base */
                 C(S(KC_TAB)),   C(KC_C), _______, C(KC_V),      C(KC_TAB),      MO(3),          _______,        EE_CLR),
     [2] = LAYOUT(/* Base */
@@ -31,24 +31,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_MS_WH_DOWN, KC_MS_WH_UP) },
+    [0] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
     [1] = { ENCODER_CCW_CW(FAST_SCROLL_RIGHT, FAST_SCROLL_LEFT) },
     [2] = { ENCODER_CCW_CW(FAST_SCROLL_DOWN, FAST_SCROLL_UP) },
-    [3] = { ENCODER_CCW_CW(KC_MS_WH_DOWN, KC_MS_WH_UP) },
+    [3] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
 };
 #endif // ENCODER_MAP_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(2, KC_BTN4):
+        case LT(2, MS_BTN4):
             if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_BTN4);
+                tap_code16(MS_BTN4);
                 return false;
             }
             return true;
-        case LT(1, KC_BTN5):
+        case LT(1, MS_BTN5):
             if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_BTN5);
+                tap_code16(MS_BTN5);
                 return false;
             }
             return true;
