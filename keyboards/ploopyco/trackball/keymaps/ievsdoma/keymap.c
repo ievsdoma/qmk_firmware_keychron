@@ -17,15 +17,24 @@
  */
 #include QMK_KEYBOARD_H
 
+enum custom_layers {
+    _BASE,   // Layer 0
+    _SCROLL  // Layer 1
+};
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT( /* Base */
-        MS_BTN1, MS_BTN3, MS_BTN2,
-          MS_BTN4, MS_BTN5
+    [_BASE] = LAYOUT(
+        MS_BTN1, MS_BTN3, DRAG_SCROLL, MS_BTN2, LT(_SCROLL, KC_ESC)
+    ),
+    [_SCROLL] = LAYOUT(
+        C(KC_C), C(KC_W), C(KC_V), KC_WWW_REFRESH, _______
     ),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
+    [_BASE] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
+    [_SCROLL] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
 };
 #endif // ENCODER_MAP_ENABLE

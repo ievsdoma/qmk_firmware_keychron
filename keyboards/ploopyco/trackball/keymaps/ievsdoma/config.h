@@ -1,0 +1,4 @@
+#pragma once
+
+#define PLOOPY_DRAGSCROLL_MOMENTARY
+#define PLOOPY_DRAGSCROLL_INVERT
