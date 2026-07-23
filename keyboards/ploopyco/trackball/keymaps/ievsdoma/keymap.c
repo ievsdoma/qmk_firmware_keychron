@@ -34,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE] = { ENCODER_CCW_CW(QK_MOUSE_WHEEL_DOWN, QK_MOUSE_WHEEL_UP) },
+    [_BASE] = { ENCODER_CCW_CW(_______, _______) },
     [_SCROLL] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
 };
 #endif // ENCODER_MAP_ENABLE
