@@ -17,17 +17,21 @@
  */
 #include QMK_KEYBOARD_H
 
+enum custom_keycodes {
+    TAP_HOLD_DRAG_SCROLL = SAFE_RANGE
+};
+
 enum custom_layers {
     _BASE,   // Layer 0
-    _SCROLL  // Layer 1
+    _ALT  // Layer 1
 };
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        MS_BTN1, MS_BTN3, DRAG_SCROLL, MS_BTN2, LT(_SCROLL, KC_ESC)
+        MS_BTN1, TAP_HOLD_DRAG_SCROLL, DRAG_SCROLL, MS_BTN2, LT(_ALT, KC_ESC)
     ),
-    [_SCROLL] = LAYOUT(
+    [_ALT] = LAYOUT(
         C(KC_C), C(KC_W), C(KC_V), KC_WWW_REFRESH, _______
     ),
 };
@@ -35,6 +39,59 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_BASE] = { ENCODER_CCW_CW(_______, _______) },
-    [_SCROLL] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
+    [_ALT] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
 };
 #endif // ENCODER_MAP_ENABLE
+
+// Track the state of the button
+static uint16_t tap_hold_timer = 0;
+static bool button_is_pressed = false;
+static bool drag_scroll_engaged = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TAP_HOLD_DRAG_SCROLL:
+            if (record->event.pressed) {
+                // Button went DOWN
+                tap_hold_timer = timer_read();
+                button_is_pressed = true;
+                drag_scroll_engaged = false;
+            } else {
+                // Button went UP
+                button_is_pressed = false;
+
+                if (drag_scroll_engaged) {
+                    // It was a hold: Turn off drag scroll by sending a false release record
+                    keyrecord_t drag_record = *record;
+                    drag_record.event.pressed = false;
+                    process_record_kb(DRAG_SCROLL, &drag_record);
+                    drag_scroll_engaged = false;
+                } else {
+                    // It was a short press: Simulate a normal mouse click tap
+                    register_code16(MS_BTN3); // Change this to your desired tap command
+                    unregister_code16(MS_BTN3);
+                }
+
+                tap_hold_timer = 0; // Clear the timer safely
+            }
+            return false; // Handled
+
+        default:
+            return true; // Pass through all other keys
+    }
+}
+
+void matrix_scan_user(void) {
+    // ONLY check the timer if the physical button is currently being held down
+    if (button_is_pressed && !drag_scroll_engaged) {
+        if (timer_elapsed(tap_hold_timer) > TAPPING_TERM) {
+            drag_scroll_engaged = true;
+
+            // Forcefully inject the drag scroll press event
+            keyrecord_t drag_record;
+            drag_record.event.pressed = true;
+            drag_record.event.time = timer_read();
+            process_record_kb(DRAG_SCROLL, &drag_record);
+        }
+    }
+}
