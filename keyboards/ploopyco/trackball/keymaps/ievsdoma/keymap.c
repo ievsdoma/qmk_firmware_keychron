@@ -23,23 +23,28 @@ enum custom_keycodes {
 
 enum custom_layers {
     _BASE,   // Layer 0
-    _ALT  // Layer 1
+    _COPYPASTE,  // Layer 1
+    _NAVIGATE
 };
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        MS_BTN1, TAP_HOLD_DRAG_SCROLL, DRAG_SCROLL, MS_BTN2, LT(_ALT, KC_ESC)
+        MS_BTN1, TAP_HOLD_DRAG_SCROLL, LT(_NAVIGATE, KC_WWW_REFRESH), MS_BTN2, LT(_COPYPASTE, KC_ESC)
     ),
-    [_ALT] = LAYOUT(
+    [_COPYPASTE] = LAYOUT(
         C(KC_C), C(KC_W), C(KC_V), KC_WWW_REFRESH, _______
+    ),
+    [_NAVIGATE] = LAYOUT(
+        _______, _______, _______, MS_BTN4, MS_BTN5
     ),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_BASE] = { ENCODER_CCW_CW(_______, _______) },
-    [_ALT] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
+    [_COPYPASTE] = { ENCODER_CCW_CW(MS_BTN4, MS_BTN5) },
+    [_NAVIGATE] = { ENCODER_CCW_CW(_______, _______) },
 };
 #endif // ENCODER_MAP_ENABLE
 
