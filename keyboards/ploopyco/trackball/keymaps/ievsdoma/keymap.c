@@ -17,8 +17,9 @@
  */
 #include QMK_KEYBOARD_H
 
-enum custom_keycodes {
-    TAP_HOLD_DRAG_SCROLL = SAFE_RANGE
+enum custom_keycodes_user {
+    TAP_HOLD_DRAG_SCROLL = SAFE_RANGE,
+    SNIPER_MODE
 };
 
 enum custom_layers {
@@ -33,10 +34,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MS_BTN1, TAP_HOLD_DRAG_SCROLL, LT(_NAVIGATE, KC_WWW_REFRESH), MS_BTN2, LT(_COPYPASTE, KC_ESC)
     ),
     [_COPYPASTE] = LAYOUT(
-        C(KC_C), C(KC_W), C(KC_V), KC_WWW_REFRESH, _______
+        C(KC_C), C(KC_W), C(KC_V), C(KC_TAB), _______
     ),
     [_NAVIGATE] = LAYOUT(
-        _______, _______, _______, MS_BTN4, MS_BTN5
+        DPI_CONFIG, _______, _______, MS_BTN4, MS_BTN5
     ),
 };
 
@@ -52,6 +53,9 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 static uint16_t tap_hold_timer = 0;
 static bool button_is_pressed = false;
 static bool drag_scroll_engaged = false;
+
+// 1. Maintain clean state tracking variables
+static uint16_t cached_baseline_dpi = 1200;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -78,6 +82,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
 
                 tap_hold_timer = 0; // Clear the timer safely
+            }
+            return false; // Handled
+
+
+        case SNIPER_MODE:
+            if (record->event.pressed) {
+                // 1. Snag the current DPI right before slowing down
+                cached_baseline_dpi = pointing_device_get_cpi();
+
+                // 2. Calculate half sensitivity (e.g., 1600 DPI becomes 800 DPI)
+                uint16_t target_dpi = cached_baseline_dpi / 3;
+
+                // 3. Prevent the sensor from freezing if math drops it too low
+                if (target_dpi < 200) {
+                    target_dpi = 200;
+                }
+
+                pointing_device_set_cpi(target_dpi);
+            } else {
+                // 4. Restore the exact original baseline DPI on release
+                pointing_device_set_cpi(cached_baseline_dpi);
             }
             return false; // Handled
 
